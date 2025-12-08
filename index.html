@@ -173,6 +173,101 @@
       page-break-before: always;
     }
 
+    /* Password landing overlay */
+    .password-overlay {
+      position: fixed;
+      inset: 0;
+      background: #e6e6e6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .password-box {
+      background: #ffffff;
+      border: 2px solid var(--ascent-charcoal);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+      padding: 32px 40px 36px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .password-box img.logo-main {
+      margin-bottom: 16px;
+    }
+
+    .password-title {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .password-instructions {
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .password-form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .password-input {
+      padding: 10px 12px;
+      font-size: 14px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    .password-button {
+      margin-top: 8px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 4px;
+      border: none;
+      background: var(--ascent-orange);
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    .password-button:hover {
+      opacity: 0.9;
+    }
+
+    .password-error {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #b00020;
+    }
+
+    /* Resource buttons on Contacts page */
+    .resource-buttons {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .resource-button {
+      display: inline-block;
+      padding: 10px 18px;
+      border-radius: 4px;
+      background: var(--ascent-orange);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid var(--ascent-charcoal);
+    }
+
+    .resource-button:hover {
+      opacity: 0.9;
+    }
+
     @media print {
       body {
         background: #ffffff;
@@ -186,10 +281,38 @@
       .page-break {
         page-break-before: always;
       }
+      .password-overlay {
+        display: none !important;
+      }
     }
   </style>
 </head>
 <body>
+
+  <!-- PASSWORD LANDING PAGE -->
+  <div id="password-overlay" class="password-overlay">
+    <div class="password-box">
+      <img src="logo.png" alt="Ascent Buildings logo" class="logo-main" />
+      <h2 class="password-title">Benefits Guide Access</h2>
+      <p class="password-instructions">
+        Please enter the password provided by Ascent Structural to view the Group Benefits Guide.
+      </p>
+      <form id="password-form">
+        <div class="password-form-row">
+          <input
+            type="password"
+            id="password-input"
+            class="password-input"
+            placeholder="Enter password"
+            autocomplete="off"
+            required
+          />
+          <button type="submit" class="password-button">Enter</button>
+        </div>
+        <p id="password-error" class="password-error" style="display: none;"></p>
+      </form>
+    </div>
+  </div>
 
   <!-- COVER PAGE -->
   <div class="page">
@@ -982,6 +1105,18 @@
         <p><strong>Phone:</strong> (615) 813-5480 or (615) 257-0075</p>
         <p><strong>Email:</strong> lisa.mitchell@ascentbuildings.com or brandi.biddle@ascentbuildings.com</p>
         <p><strong>Office:</strong> 905 Harbour Drive, Scottsboro, AL 35769 </p>
+
+        <div class="resource-buttons">
+          <a href="fsacare.pdf" class="resource-button" target="_blank" rel="noopener">
+            HealthCare FSA Guide
+          </a>
+          <a href="dcare.pdf" class="resource-button" target="_blank" rel="noopener">
+            Dependent Care FSA Guide
+          </a>
+          <a href="enrollment.pdf" class="resource-button" target="_blank" rel="noopener">
+            BCBST Enrollment / Waiver Form
+          </a>
+        </div>
       </div>
       <div>
         <h3>Carrier Contacts</h3>
@@ -1014,5 +1149,29 @@
     <div class="page-footer">Employee Benefits Renewal 2026</div>
   </div>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var form = document.getElementById('password-form');
+      var input = document.getElementById('password-input');
+      var error = document.getElementById('password-error');
+      var overlay = document.getElementById('password-overlay');
+
+      if (!form || !input || !overlay) return;
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var value = input.value || "";
+        if (value === 'Fritz26##') {
+          overlay.style.display = 'none';
+          input.value = '';
+        } else {
+          error.textContent = 'Incorrect password. Please try again.';
+          error.style.display = 'block';
+          input.value = '';
+          input.focus();
+        }
+      });
+    });
+  </script>
 </body>
 </html>
